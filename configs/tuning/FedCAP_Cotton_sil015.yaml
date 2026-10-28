@@ -1,0 +1,60 @@
+# FedCAP-Cotton 主实验配置（简化版 S2：关闭类别支持度加权）
+# 与 FedCAP_CottonMain.yaml 唯一区别：class_support_alpha: 0.0（均匀头部聚合）。
+# 用途：S1 vs S2 对照，判断类别支持度加权是否值得保留。
+algorithm: FedCAP
+dataset: cotton30
+client_num: 90
+sample_ratio: 0.2
+seed: 1
+device: cuda
+partition: family
+alpha: 0.5  # Unused for Cotton family partitioning.
+drift_pattern: false
+model: MLP
+num_classes: 2
+rounds: 100
+eval_interval: 20
+cotton_root: data/cotton
+cotton_feature_set: no-expression
+cotton_test_eval: false
+cotton_cross_source_eval: false
+cotton_export_source_scores: false
+output_root: runs
+# —— 静态 FedCAP 核心结构（不含跨簇行共享）——
+probe_training: legacy
+probe_budget: 100
+probe_steps: 5
+probe_lr: 0.1
+probe_init: reference_head
+reference_strategy: average_reset
+reference_refresh: 10
+profile_head: reference
+profile_weight: 0.5
+profile_samples_per_class: 64
+head_weights: uniform
+head_sharing: none               # 主实验：关闭跨簇同编号类别行共享
+label_merge_guard: none
+min_class_samples: 2
+cluster_method: agglomerative
+hdbscan_min_samples: 2
+max_candidate_clusters: 5
+max_total_clusters: 5
+min_cluster_size: 3
+silhouette_threshold: 0.15
+regroup_confirmations: 1
+merge_guard: none
+profile_merge_guard: none
+body_aggregation_step: 1.0
+body_prox_mu: 0.0
+head_calibration_ratio: 0.0
+class_support_alpha: 0.0         # S2：关闭支持度加权（均匀聚合）
+class_support_count_cap: 0       # CapFull（alpha=0 时权重恒为均匀）
+rep_epochs: 5
+clf_epochs: 1
+rep_lr: 0.01
+clf_lr: 0.1
+batch_size: 64
+momentum: 0.9
+weight_decay: 0.00001
+descriptor_ttl: 10
+deterministic: true

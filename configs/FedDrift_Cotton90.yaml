@@ -1,0 +1,27 @@
+# Same Cotton data/participation budget; original FedDrift training is unchanged.
+algorithm: FedDrift
+dataset: cotton30
+client_num: 90
+sample_ratio: 0.2
+seed: 1
+device: cuda
+partition: family
+alpha: 0.5  # Not used by Cotton family partitioning.
+drift_pattern: false
+model: MLP
+num_classes: 2
+rounds: 100
+eval_interval: 20
+output_root: CottonExperiments/validation
+cotton_root: data/cotton
+cotton_feature_set: no-expression
+cotton_test_eval: false
+cotton_cross_source_eval: false
+cotton_common_initialization: true
+deterministic: true
+epochs: 6
+lr: 0.01
+momentum: 0.9
+weight_decay: 0.00001
+batch_size: 64
+detection_threshold: 0.5
